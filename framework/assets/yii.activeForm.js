@@ -368,14 +368,19 @@
             }
         },
 
-        resetForm: function () {
-            var $form = $(this);
-            var data = $form.data('yiiActiveForm');
+        resetForm: function (id) {
+            var $form = $(this),
+                data = $form.data('yiiActiveForm'),
+                $errorSummary = $form.find(data.settings.errorSummary);
+
             // Because we bind directly to a form reset event instead of a reset button (that may not exist),
             // when this function is executed form input values have not been reset yet.
             // Therefore we do the actual reset work through setTimeout.
             setTimeout(function () {
-                $.each(data.attributes, function () {
+                $.each(jQuery.grep(data.attributes, function(a, i) {
+                    return !id || typeof id == 'undefined' || $.inArray(a['id'], ($.isArray(id) ? id : [id])) != -1;
+                }),
+                function () {
                     // Without setTimeout() we would get the input values that are not reset yet.
                     this.value = getValue($form, this);
                     this.status = 0;
@@ -386,8 +391,12 @@
                             data.settings.successCssClass
                     );
                     $container.find(this.error).html('');
+
+                    if (id)
+                        $errorSummary.find('ul li.field-'+this.id).remove();
                 });
-                $form.find(data.settings.errorSummary).hide().find('ul').html('');
+                if (!id || typeof id == 'undefined')
+                    $errorSummary.hide().find('ul').html('');
             }, 1);
         }
     };
@@ -451,7 +460,7 @@
             methods.validate.call($form);
         }, validationDelay ? validationDelay : 200);
     };
-    
+
     /**
      * Returns an array prototype with a shortcut method for adding a new deferred.
      * The context of the callback will be the deferred object so it can be resolved like ```this.resolve()```
@@ -523,6 +532,7 @@
     var updateInput = function ($form, attribute, messages) {
         var data = $form.data('yiiActiveForm'),
             $input = findInput($form, attribute),
+            $errorSummary = $form.find(data.settings.errorSummary),
             hasError = false;
 
         if (!$.isArray(messages[attribute.id])) {
@@ -547,6 +557,7 @@
                 $error.empty();
                 $container.removeClass(data.settings.validatingCssClass + ' ' + data.settings.errorCssClass + ' ')
                     .addClass(data.settings.successCssClass);
+                $errorSummary.find('ul li.field-'+attribute.id).remove();
             }
             attribute.value = getValue($form, attribute);
         }
@@ -566,7 +577,7 @@
         if ($summary.length && messages) {
             $.each(data.attributes, function () {
                 if ($.isArray(messages[this.id]) && messages[this.id].length) {
-                    var error = $('<li/>');
+                    var error = $('<li/>').attr({class: 'field-' + this.id});
                     if (data.settings.encodeErrorSummary) {
                         error.text(messages[this.id][0]);
                     } else {
