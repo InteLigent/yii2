@@ -251,6 +251,48 @@
             return this.data('yiiActiveForm');
         },
 
+        validateAttribute: function (id, forceValidate, validationDelay) {
+            var $this = (this);
+
+            if (id instanceof jQuery) {
+                var temp_id = [];
+                id.prop("id", function(index, val) {
+                    temp_id.push(val);
+                });
+                id = temp_id;
+            }
+
+            $.each(($.isArray(id) ? id : [id]), function(index, id) {
+                var attribute = methods['find'].call($this, id);
+
+                if (attribute !== false) {
+                    validateAttribute($this, attribute, forceValidate, validationDelay);
+                }
+            });
+        },
+
+        hasError: function (id) {
+            var $form = (this), data = $form.data('yiiActiveForm'), hasError = {};
+
+            $.each(($.isArray(id) ? id : [id]), function(index, id) {
+                var attribute = methods['find'].call($form, id);
+
+                if (attribute.status == 1) {
+                    var $container = $form.find(attribute.container);
+
+                    if ($container.hasClass(data.settings.errorCssClass))
+                        hasError[attribute.id] = true;
+                    else
+                        hasError[attribute.id] = false;
+                }
+            });
+
+            if (!$.isArray(id) && id in hasError)
+                return hasError[id];
+
+            return hasError;
+        },
+
         validate: function () {
             var $form = $(this),
                 data = $form.data('yiiActiveForm'),
