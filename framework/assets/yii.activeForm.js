@@ -254,39 +254,41 @@
         validateAttribute: function (id, forceValidate, validationDelay) {
             var $this = (this);
 
-            if (id instanceof jQuery) {
-                var temp_id = [];
-                id.prop("id", function(index, val) {
-                    temp_id.push(val);
-                });
-                id = temp_id;
-            }
+            $.each(normalizeId(id), function(index, id) {
+                var attribute = methods.find.call($this, id);
 
-            $.each(($.isArray(id) ? id : [id]), function(index, id) {
-                var attribute = methods['find'].call($this, id);
-
-                if (attribute !== false) {
+                if (attribute != undefined) {
                     validateAttribute($this, attribute, forceValidate, validationDelay);
                 }
             });
         },
 
         hasError: function (id) {
-            var $form = (this), data = $form.data('yiiActiveForm'), hasError = {};
+            var $form = $(this),
+                data = $form.data('yiiActiveForm'),
+                hasError = {};
 
-            $.each(($.isArray(id) ? id : [id]), function(index, id) {
-                var attribute = methods['find'].call($form, id);
+            $.each(normalizeId(id), function(index, id) {
+                var attribute = methods.find.call($form, id);
 
-                if (attribute.status == 1) {
-                    var $container = $form.find(attribute.container);
+                if (attribute != undefined) {
+                    if (attribute.status == 1) {
+                        var $container = $form.find(attribute.container);
 
-                    if ($container.hasClass(data.settings.errorCssClass))
-                        hasError[attribute.id] = true;
-                    else
-                        hasError[attribute.id] = false;
+                        if ($container.hasClass(data.settings.errorCssClass))
+                            hasError[attribute.id] = true;
+                        else
+                            hasError[attribute.id] = false;
+                    }
+                    else {
+                        hasError[attribute.id] = undefined;
+                    }
                 }
             });
 
+            /**
+             * TODO: id может быть также как обьект jQuery, надо будет добавить поддержку.
+             */
             if (!$.isArray(id) && id in hasError)
                 return hasError[id];
 
@@ -410,17 +412,37 @@
             }
         },
 
+        resetStatus: function (id) {
+            var $form = $(this),
+                data  = $form.data('yiiActiveForm');
+
+            if (id)
+                id = normalizeId(id);
+
+            $.each(jQuery.grep(data.attributes, function(a, i) {
+                    return !id  || $.inArray(a['id'], id) != -1;
+                }),
+                function () {
+                    this.value = getValue($form, this);
+                    this.status = 0;
+                }
+            );
+        },
+
         resetForm: function (id) {
             var $form = $(this),
                 data = $form.data('yiiActiveForm'),
                 $errorSummary = $form.find(data.settings.errorSummary);
+
+            if (id && !(id instanceof jQuery.Event))
+                id = normalizeId(id);
 
             // Because we bind directly to a form reset event instead of a reset button (that may not exist),
             // when this function is executed form input values have not been reset yet.
             // Therefore we do the actual reset work through setTimeout.
             setTimeout(function () {
                 $.each(jQuery.grep(data.attributes, function(a, i) {
-                    return !id || typeof id == 'undefined' || $.inArray(a['id'], ($.isArray(id) ? id : [id])) != -1;
+                    return !id  || id instanceof jQuery.Event || $.inArray(a['id'], id) != -1;
                 }),
                 function () {
                     // Without setTimeout() we would get the input values that are not reset yet.
@@ -437,7 +459,7 @@
                     if (id)
                         $errorSummary.find('ul li.field-'+this.id).remove();
                 });
-                if (!id || typeof id == 'undefined')
+                if (!id)
                     $errorSummary.hide().find('ul').html('');
             }, 1);
         }
@@ -655,5 +677,31 @@
             return $input;
         }
     };
+
+    var normalizeId = function (id) {
+        switch ($.type(id)) {
+            case 'string':
+                return [id];
+            case 'object':
+                if (id.nodeType === 1)
+                    return [id.id];
+                else
+                    id = $.makeArray(id);
+                break;
+            case 'array':
+                break;
+            default:
+                return [];
+        }
+
+        return $.map(id, function(val) {
+            if (val instanceof jQuery)
+                return val.prop('id');
+            else if (typeof val == 'string')
+                return val;
+            else if (val.nodeType === 1)
+                return val.id;
+        });
+    }
 
 })(window.jQuery);
