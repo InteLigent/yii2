@@ -137,7 +137,7 @@ yii = (function ($) {
                 return;
             }
 
-            var newForm = !$form.length || action && action != '#';
+            var newForm = !$form.length && action && action != '#';
             if (newForm) {
                 if (!action || !action.match(/(^\/|:\/\/)/)) {
                     action = window.location.href;
@@ -160,7 +160,9 @@ yii = (function ($) {
                 }
                 $form.hide().appendTo('body');
             }
-
+            else if (action && action != '#')
+                $form.prop('action', action);
+                
             var activeFormData = $form.data('yiiActiveForm');
             if (activeFormData) {
                 // remember who triggers the form submission. This is used by yii.activeForm.js
