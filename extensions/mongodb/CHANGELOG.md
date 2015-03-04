@@ -1,7 +1,25 @@
 Yii Framework 2 mongodb extension Change Log
 ============================================
 
-2.0.1 under development
+2.0.4 under development
+-----------------------
+
+- no changes in this release.
+
+
+2.0.3 March 01, 2015
+--------------------
+
+- Bug #7010: Fixed `yii\mongodb\Query::select` now allows excluding fields (Sammaye, klimov-paul)
+
+
+2.0.2 January 11, 2015
+----------------------
+
+- Bug #6376: Fixed lazy load of relations to `yii\mongodb\file\ActiveRecord` (klimov-paul)
+
+
+2.0.1 December 07, 2014
 -----------------------
 
 - Bug #6026: Fixed `yii\mongodb\ActiveRecord` saves `null` as `_id`, if attributes are empty (klimov-paul)

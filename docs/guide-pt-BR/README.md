@@ -48,7 +48,7 @@ Tratamento de Requisições
 -------------------------
 
 * [Visão Geral](runtime-overview.md)
-* [Bootstrapping](runtime-bootstrapping.md)
+* [Inicialização (Bootstrapping)](runtime-bootstrapping.md)
 * [Roteamento e Criação de URL](runtime-routing.md)
 * [Requisições](runtime-requests.md)
 * [Respostas](runtime-responses.md)
@@ -74,14 +74,14 @@ Conceitos Chave
 Trabalhando com Banco de Dados
 ------------------------------
 
-* [Data Access Objects (DAO, Objeto de Acesso a Dados)](db-dao.md) - Estabelecendo uma conexão com o Banco de Dados, consultas básicas, transações e manipulação do esquema
-* [Query Builder (Construtor de Consulta)](db-query-builder.md) - Consultando o banco de dados usando uma camada de abstração simples
-* [Active Record](db-active-record.md) - Sobre o Active Record ORM, recuperando e manipulando registros e definindo relacionamentos
-* [Migrations (Migrações)](db-migrations.md) - Aplica controle de versão para seus banco de dados em um ambiente de desenvolvimento em equipe
+* [Data Access Objects (DAO, Objeto de Acesso a Dados)](db-dao.md)? Estabelecendo uma conexão com o Banco de Dados, consultas básicas, transações e manipulação do esquema
+* [Query Builder (Construtor de Consulta)](db-query-builder.md)? Consultando o banco de dados usando uma camada de abstração simples
+* [Active Record](db-active-record.md): Sobre o Active Record ORM, recuperando e manipulando registros e definindo relacionamentos
+* [Migrations (Migrações)](db-migrations.md): Aplica controle de versão para seus banco de dados em um ambiente de desenvolvimento em equipe
 * **TBD** [Sphinx](db-sphinx.md)
 * **TBD** [Redis](db-redis.md)
 * **TBD** [MongoDB](db-mongodb.md)
-* **TBD** [ElasticSearch](db-elastic-search.md)
+* **TBD** [ElasticSearch](db-elasticsearch.md)
 
 
 Coletando Dados de Usuários
@@ -90,15 +90,16 @@ Coletando Dados de Usuários
 * [Criando Formulários](input-forms.md)
 * [Validação de Dados](input-validation.md)
 * [Upload de Arquivos](input-file-upload.md)
-* **TBD** [Coletando Dados de Múltiplos Modelos](input-multiple-models.md)
+* [Coletando Entradas Tabulares](input-tabular-input.md)
+* [Coletando Dados de Múltiplos Models](input-multiple-models.md)
 
 
 Exibindo Dados
 ---------------
 
-* [Formatando Dados](output-formatting.md)
-* **TBD** [Paginação](output-pagination.md)
-* **TBD** [Ordenação](output-sorting.md)
+* [Formatando Dados](output-formatter.md)
+* [Paginação](output-pagination.md)
+* [Ordenação](output-sorting.md)
 * [Data Providers (Provedores de Dados)](output-data-providers.md)
 * [Widgets de Dados](output-data-widgets.md)
 * [Trabalhando com Client Scripts](output-client-scripts.md)
@@ -111,8 +112,8 @@ Segurança
 * [Autenticação](security-authentication.md)
 * [Autorização](security-authorization.md)
 * [Trabalhando com Senhas](security-passwords.md)
-* **TBD** [Auth Clients](security-auth-clients.md)
-* **TBD** [Melhores Práticas](security-best-practices.md)
+* [Auth Clients](security-auth-clients.md)
+* [Melhores Práticas](security-best-practices.md)
 
 
 Cache
@@ -125,7 +126,7 @@ Cache
 * [Cache HTTP](caching-http.md)
 
 
-Web Services com RESTful 
+Web Services RESTful 
 ------------------------
 
 * [Introdução](rest-quick-start.md)
@@ -134,7 +135,7 @@ Web Services com RESTful
 * [Roteamento](rest-routing.md)
 * [Formatando Respostas](rest-response-formatting.md)
 * [Autenticação](rest-authentication.md)
-* [Rate Limiting](rest-rate-limiting.md)
+* [Limitador de Acesso](rest-rate-limiting.md)
 * [Versionamento](rest-versioning.md)
 * [Tratamento de Erros](rest-error-handling.md)
 
@@ -151,7 +152,7 @@ Testes
 ------
 
 * [Visão Geral](test-overview.md)
-* [Configuração do ambiente de testes](test-endvironment-setup.md)
+* [Configuração do ambiente de testes](test-environment-setup.md)
 * [Testes Unitários](test-unit.md)
 * [Testes Funcionais](test-functional.md)
 * [Testes de Aceitação](test-acceptance.md)
@@ -161,7 +162,7 @@ Testes
 Tópicos Especiais
 -----------------
 
-* [Modelo de Aplicação Avançada](tutorial-advanced-app.md)
+* [Template Avançado de Aplicação](tutorial-advanced-app.md)
 * [Construindo uma Aplicação a Partir do Zero](tutorial-start-from-scratch.md)
 * [Comandos de Console](tutorial-console.md)
 * [Ferramentas de Validação Embutidas](tutorial-core-validators.md)
@@ -184,16 +185,14 @@ Widgets
 * Menu: **TBD** link para a página de demonstração
 * LinkPager: **TBD** link para a página de demonstração
 * LinkSorter: **TBD** link para a página de demonstração
-* [Widgets do Bootstrap](bootstrap-widgets.md)
-* [Widgets do Jquery UI](jui-widgets.md)
+* [Widgets do Bootstrap](widget-bootstrap.md)
+* [Widgets do JQuery UI](widget-jui.md)
 
 
 Helpers
 -------
 
 * [Visão Geral](helper-overview.md)
-* **TBD** [ArrayHelper](helper-array.md)
-* **TBD** [Html](helper-html.md)
-* **TBD** [Url](helper-url.md)
-* **TBD** [Segurança](helper-security.md)
-
+* [ArrayHelper](helper-array.md)
+* [Html](helper-html.md)
+* [Url](helper-url.md)
