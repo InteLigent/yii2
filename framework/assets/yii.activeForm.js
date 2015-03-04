@@ -251,6 +251,10 @@
             return this.data('yiiActiveForm');
         },
 
+        updateSummary: function(messages) {
+            updateSummary($(this), messages);
+        },
+
         validateAttribute: function (id, forceValidate, validationDelay) {
             var $this = (this);
 
@@ -293,6 +297,21 @@
                 return hasError[id];
 
             return hasError;
+        },
+
+        cleanSummary: function(id) {
+            var $form = $(this),
+                data = $form.data('yiiActiveForm'),
+                $summary = $form.find(data.settings.errorSummary);
+
+            id = normalizeId(id);
+
+            $.each(normalizeId(id), function(index, id) {
+                $summary.find('ul li.field-'+id).remove();
+            });
+
+            if ($summary.find('ul > li').length == 0)
+                $summary.hide();
         },
 
         validate: function () {
@@ -443,8 +462,7 @@
             setTimeout(function () {
                 $.each(jQuery.grep(data.attributes, function(a, i) {
                     return !id  || id instanceof jQuery.Event || $.inArray(a['id'], id) != -1;
-                }),
-                function () {
+                }), function () {
                     // Without setTimeout() we would get the input values that are not reset yet.
                     this.value = getValue($form, this);
                     this.status = 0;
@@ -461,6 +479,8 @@
                 });
                 if (!id)
                     $errorSummary.hide().find('ul').html('');
+                else if ($errorSummary.find('ul > li').length == 0)
+                    $errorSummary.hide();
             }, 1);
         }
     };
@@ -560,7 +580,7 @@
             updateSummary($form, messages);
 
             if (errorInputs.length) {
-                var top = $form.find(errorInputs.join(',')).first().offset().top;
+                var top = $form.find(errorInputs.join(',')).first().closest(':visible').offset().top;
                 var wtop = $(window).scrollTop();
                 if (top < wtop || top > wtop + $(window).height) {
                     $(window).scrollTop(top);
@@ -622,6 +642,9 @@
                 $container.removeClass(data.settings.validatingCssClass + ' ' + data.settings.errorCssClass + ' ')
                     .addClass(data.settings.successCssClass);
                 $errorSummary.find('ul li.field-'+attribute.id).remove();
+
+                if ($errorSummary.find('ul > li').length == 0)
+                    $errorSummary.hide();
             }
             attribute.value = getValue($form, attribute);
         }
